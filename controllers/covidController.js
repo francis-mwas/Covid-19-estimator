@@ -50,13 +50,25 @@ export default class CovidController {
       totalHospitalBeds,
       population
     } = req.body;
+    const {
+      avgAge,
+      name,
+      avgDailyIncomeInUSD,
+      avgDailyIncomePopulation
+    } = req.body.region;
 
     const newCovidData = new Covid({
       periodType,
       timeToElapse,
       reportedCases,
       totalHospitalBeds,
-      population
+      population,
+      region: {
+        avgAge,
+        name,
+        avgDailyIncomeInUSD,
+        avgDailyIncomePopulation
+      }
     });
 
     try {
