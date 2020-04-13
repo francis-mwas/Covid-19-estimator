@@ -194,7 +194,7 @@ export default class CovidController {
 
     if (format === "xml") {
       res.contentType("application/xml");
-      return res.status(200).send(jsonxml(stringifyData));
+      return res.status(200).send(jsonxml(stringifyData, { xmlHeader: true }));
     }
 
     return res.status(200).json({
