@@ -2,7 +2,7 @@ import fs from "fs";
 import Covid from "../model/covidModel";
 const jsonxml = require("jsontoxml");
 
-const covid19Data = {
+let covid19Data = {
   region: {
     name: "Africa",
     avgAge: 19.7,
@@ -15,6 +15,8 @@ const covid19Data = {
   population: 92931687,
   totalHospitalBeds: 678874
 };
+
+console.log("The covid data:", covid19Data.region);
 
 export default class CovidController {
   static async addRegionData(req, res) {
@@ -57,7 +59,7 @@ export default class CovidController {
       avgDailyIncomePopulation
     } = req.body.region;
 
-    const newCovidData = new Covid({
+    const newCovidData = {
       periodType,
       timeToElapse,
       reportedCases,
@@ -69,29 +71,36 @@ export default class CovidController {
         avgDailyIncomeInUSD,
         avgDailyIncomePopulation
       }
-    });
+    };
 
-    try {
-      const covid = await newCovidData.save();
-      res.status(201).json({
-        status: true,
-        Message: "New Data successfully added",
-        covid
-      });
-    } catch (error) {
-      if (error) {
-        return res.status(400).json({
-          status: false,
-          Message: `An error occured while saving the product: ${error}`
-        });
-      }
-    }
+    covid19Data = {
+      ...newCovidData
+    };
+
+    res.status(201).json({
+      status: true,
+      Message: "New Data successfully added",
+      covid19Data
+    });
+    // try {
+    //   const covid = await newCovidData.save();
+    //   res.status(201).json({
+    //     status: true,
+    //     Message: "New Data successfully added",
+    //     covid
+    //   });
+    // } catch (error) {
+    //   if (error) {
+    //     return res.status(400).json({
+    //       status: false,
+    //       Message: `An error occured while saving the product: ${error}`
+    //     });
+    //   }
+    // }
   }
 
   static async getCovidData(req, res) {
     const format = req.params.format;
-    // const avgDailyIncomePopulation = regionData[0].avgDailyIncomePopulation;
-    // const avgDailyIncomeInUSD = regionData[0].avgDailyIncomeInUSD;
 
     const {
       periodType,
