@@ -2,6 +2,20 @@ import fs from "fs";
 import Covid from "../model/covidModel";
 const jsonxml = require("jsontoxml");
 
+const covid19Data = {
+  region: {
+    name: "Africa",
+    avgAge: 19.7,
+    avgDailyIncomeInUSD: 4,
+    avgDailyIncomePopulation: 0.73
+  },
+  periodType: "days",
+  timeToElapse: 38,
+  reportedCases: 2747,
+  population: 92931687,
+  totalHospitalBeds: 678874
+};
+
 export default class CovidController {
   static async addRegionData(req, res) {
     const {
@@ -64,16 +78,8 @@ export default class CovidController {
 
   static async getCovidData(req, res) {
     const format = req.params.format;
-
-    const { dataId } = req.body;
-    const getCovidData = await Covid.findById(dataId).populate({
-      path: "Covid",
-      select: "-createdAt -__v -_id"
-    });
-    const regionData = getCovidData.region.map(regions => regions);
-
-    const avgDailyIncomePopulation = regionData[0].avgDailyIncomePopulation;
-    const avgDailyIncomeInUSD = regionData[0].avgDailyIncomeInUSD;
+    // const avgDailyIncomePopulation = regionData[0].avgDailyIncomePopulation;
+    // const avgDailyIncomeInUSD = regionData[0].avgDailyIncomeInUSD;
 
     const {
       periodType,
@@ -81,7 +87,14 @@ export default class CovidController {
       reportedCases,
       totalHospitalBeds,
       population
-    } = getCovidData;
+    } = covid19Data;
+
+    const {
+      name,
+      avgAge,
+      avgDailyIncomeInUSD,
+      avgDailyIncomePopulation
+    } = covid19Data.region;
 
     function factor() {
       let toDays = 0;
@@ -167,7 +180,7 @@ export default class CovidController {
       dollarsInFlight: output
     };
     const covidData = {
-      getCovidData,
+      covid19Data,
       impact,
       severeImpact
     };
