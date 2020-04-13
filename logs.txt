@@ -1,0 +1,7 @@
+POST /api/v1/on-covid-19 200 930 - 7.573 ms
+POST /api/v1/on-covid-19 200 930 - 0.534 ms
+POST /api/v1/on-covid-19 200 930 - 5.527 ms
+GET /api/v1/on-covid-19/logs 200 132 - 1.087 ms
+GET /api/v1/on-covid-19/logs 200 180 - 0.372 ms
+GET /api/v1/on-covid-19/logs 200 228 - 14.021 ms
+GET /api/v1/on-covid-19/logs 200 277 - 4.225 ms
