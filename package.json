@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon api.js",
-    "build": "rm -rf dist && mkdir dist && babel . --ignore node_modules -d dist"
+    "start": "nodemon --exec babel-node api.js"
   },
   "author": "Francis mwas",
   "license": "ISC",
   "dependencies": {
+    "@babel/cli": "^7.8.4",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -20,11 +20,10 @@
     "nodemon": "^2.0.3"
   },
   "devDependencies": {
-    "@babel/cli": "^7.6.2",
-    "@babel/core": "^7.6.2",
-    "@babel/node": "^7.6.2",
-    "@babel/preset-env": "^7.6.2",
-    "@babel/register": "^7.6.2",
+    "@babel/core": "^7.9.0",
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.9.5",
+    "@babel/register": "^7.9.0",
     "eslint": "^6.5.1",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.3.0",
