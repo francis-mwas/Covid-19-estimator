@@ -2,7 +2,7 @@ import fs from "fs";
 import Covid from "../model/covidModel";
 const jsonxml = require("jsontoxml");
 
-let covid19Data = {
+const covid19Data = {
   region: {
     name: "Africa",
     avgAge: 19.7,
@@ -16,7 +16,7 @@ let covid19Data = {
   totalHospitalBeds: 678874
 };
 
-console.log("The covid data:", covid19Data.region);
+// console.log("The covid data:", covid19Data.region);
 
 export default class CovidController {
   static async addRegionData(req, res) {
@@ -59,7 +59,7 @@ export default class CovidController {
       avgDailyIncomePopulation
     } = req.body.region;
 
-    const newCovidData = {
+    const newCovidData = new Covid({
       periodType,
       timeToElapse,
       reportedCases,
@@ -71,51 +71,50 @@ export default class CovidController {
         avgDailyIncomeInUSD,
         avgDailyIncomePopulation
       }
-    };
-
-    covid19Data = {
-      ...newCovidData
-    };
-
-    res.status(201).json({
-      status: true,
-      Message: "New Data successfully added",
-      covid19Data
     });
-    // try {
-    //   const covid = await newCovidData.save();
-    //   res.status(201).json({
-    //     status: true,
-    //     Message: "New Data successfully added",
-    //     covid
-    //   });
-    // } catch (error) {
-    //   if (error) {
-    //     return res.status(400).json({
-    //       status: false,
-    //       Message: `An error occured while saving the product: ${error}`
-    //     });
-    //   }
-    // }
+
+    try {
+      const covid = await newCovidData.save();
+      res.status(201).json({
+        status: true,
+        Message: "New Data successfully added",
+        covid
+      });
+    } catch (error) {
+      if (error) {
+        return res.status(400).json({
+          status: false,
+          Message: `An error occured while saving the product: ${error}`
+        });
+      }
+    }
   }
 
   static async getCovidData(req, res) {
     const format = req.params.format;
+    let newObject = {};
+
+    const c19Data = await Covid.find();
+
+    const otherData = c19Data.map(data1 => data1);
+    otherData.forEach(data2 => {
+      newObject = data2;
+    });
 
     const {
       periodType,
       timeToElapse,
       reportedCases,
       totalHospitalBeds,
-      population
-    } = covid19Data;
-
+      population,
+      region
+    } = newObject;
     const {
       name,
-      avgAge,
       avgDailyIncomeInUSD,
-      avgDailyIncomePopulation
-    } = covid19Data.region;
+      avgDailyIncomePopulation,
+      avgAge
+    } = region;
 
     function factor() {
       let toDays = 0;
@@ -200,17 +199,17 @@ export default class CovidController {
       casesForVentilatorsByRequestedTime: seCasesForVentilators,
       dollarsInFlight: output
     };
-    const covidData = {
-      covid19Data,
+    const data = {
+      newObject,
       impact,
       severeImpact
     };
 
-    const stringifyData = JSON.stringify(covidData);
+    const stringifyData = JSON.stringify(data);
 
     if (format === "json") {
       res.contentType("application/json");
-      return res.status(200).send(covidData);
+      return res.status(200).send(data);
     }
 
     if (format === "xml") {
@@ -221,7 +220,7 @@ export default class CovidController {
     return res.status(200).json({
       status: "success",
       message: "Data returned successfully",
-      covidData
+      data
     });
   }
 

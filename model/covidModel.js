@@ -1,21 +1,19 @@
 import mongoose from "mongoose";
 const covidDataSchema = new mongoose.Schema({
-  region: [
-    {
-      name: {
-        type: String
-      },
-      avgAge: {
-        type: String
-      },
-      avgDailyIncomeInUSD: {
-        type: String
-      },
-      avgDailyIncomePopulation: {
-        type: String
-      }
+  region: {
+    name: {
+      type: String
+    },
+    avgAge: {
+      type: String
+    },
+    avgDailyIncomeInUSD: {
+      type: String
+    },
+    avgDailyIncomePopulation: {
+      type: String
     }
-  ],
+  },
   periodType: {
     type: String
   },
