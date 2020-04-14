@@ -2,22 +2,6 @@ import fs from "fs";
 import Covid from "../model/covidModel";
 const jsonxml = require("jsontoxml");
 
-const covid19Data = {
-  region: {
-    name: "Africa",
-    avgAge: 19.7,
-    avgDailyIncomeInUSD: 4,
-    avgDailyIncomePopulation: 0.73
-  },
-  periodType: "days",
-  timeToElapse: 38,
-  reportedCases: 2747,
-  population: 92931687,
-  totalHospitalBeds: 678874
-};
-
-// console.log("The covid data:", covid19Data.region);
-
 export default class CovidController {
   static async addRegionData(req, res) {
     const {
