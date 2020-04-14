@@ -21,3 +21,43 @@
 //     stream: accessLogStream
 //   })
 // );
+
+/////////////////////////
+// let covidData = {
+//   periodType: "days",
+//   timeToElapse: "38",
+//   reportedCases: "2747",
+//   totalHospitalBeds: "678874",
+//   population: "92931687",
+//   region: {
+//     avgAge: "19.7",
+//     name: "Africa",
+//     avgDailyIncomeInUSD: "4",
+//     avgDailyIncomePopulation: "0.73"
+//   }
+// };
+
+// let newObject = {};
+
+// const c19Data = await Covid.find();
+
+// const otherData = c19Data.map(data1 => data1);
+// otherData.forEach(data2 => {
+//   newObject = data2;
+// });
+
+// const {
+//   periodType,
+//   timeToElapse,
+//   reportedCases,
+//   totalHospitalBeds,
+//   population,
+//   region
+// } = covidData;
+
+// const {
+//   name,
+//   avgDailyIncomeInUSD,
+//   avgDailyIncomePopulation,
+//   avgAge
+// } = covidData.region;

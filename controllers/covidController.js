@@ -198,45 +198,6 @@ export default class CovidController {
       ...req.body
     };
 
-    // let covidData = {
-    //   periodType: "days",
-    //   timeToElapse: "38",
-    //   reportedCases: "2747",
-    //   totalHospitalBeds: "678874",
-    //   population: "92931687",
-    //   region: {
-    //     avgAge: "19.7",
-    //     name: "Africa",
-    //     avgDailyIncomeInUSD: "4",
-    //     avgDailyIncomePopulation: "0.73"
-    //   }
-    // };
-
-    // let newObject = {};
-
-    // const c19Data = await Covid.find();
-
-    // const otherData = c19Data.map(data1 => data1);
-    // otherData.forEach(data2 => {
-    //   newObject = data2;
-    // });
-
-    // const {
-    //   periodType,
-    //   timeToElapse,
-    //   reportedCases,
-    //   totalHospitalBeds,
-    //   population,
-    //   region
-    // } = covidData;
-
-    // const {
-    //   name,
-    //   avgDailyIncomeInUSD,
-    //   avgDailyIncomePopulation,
-    //   avgAge
-    // } = covidData.region;
-
     function factor() {
       let toDays = 0;
       if (periodType === "days") {
@@ -270,6 +231,7 @@ export default class CovidController {
 
     // code for impact
     const impCurrentlyInfected = reportedCases * 10;
+
     const impInfectionsByRequestedTime = impCurrentlyInfected * 2 ** factor();
     const impseCasesByRequestedTime = Math.trunc(
       impInfectionsByRequestedTime * 0.15
@@ -303,7 +265,7 @@ export default class CovidController {
 
     //  covid impact
     const impact = {
-      currentlyInfected: impInfectionsByRequestedTime,
+      currentlyInfected: impCurrentlyInfected,
       infectionsByRequestedTime: impInfectionsByRequestedTime,
       severeCasesByRequestedTime: impseCasesByRequestedTime,
       hospitalBedsByRequestedTime: impHospitalBedsByRequestedTime,
