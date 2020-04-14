@@ -1,4 +1,5 @@
 import fs from "fs";
+const path = require("path");
 import express from "express";
 import morgan from "morgan";
 import bodyParser from "body-parser";
@@ -14,11 +15,22 @@ dotenv.config();
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+const accessLogStream = fs.createWriteStream(
+  path.join(__dirname, "logs/access.log"),
+  { flags: "a" }
+);
 app.use(
-  morgan("tiny", {
-    stream: fs.createWriteStream("./logs.txt", { flags: "a" })
+  morgan(":method\t\t:url\t\t:status\t\t0:total-time[0]ms", {
+    stream: accessLogStream
   })
 );
+
+// app.use(
+//   morgan("tiny", {
+//     stream: fs.createWriteStream("./logs.txt", { flags: "a" })
+//   })
+// );
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

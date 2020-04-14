@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 import Covid from "../model/covidModel";
 const jsonxml = require("jsontoxml");
 
@@ -348,7 +349,10 @@ export default class CovidController {
 
   static async getLogs(req, res) {
     try {
-      var data = fs.readFileSync("./logs.txt", "utf8");
+      var data = fs.readFileSync(path.join(__dirname, "../logs/access.log"), {
+        flags: "a"
+      });
+
       res.contentType("text/plain");
       res.status(200).send(data);
     } catch (e) {
@@ -356,3 +360,10 @@ export default class CovidController {
     }
   }
 }
+
+// const accessLogStream = fs.createWriteStream(
+//   path.join(__dirname, "logs/access.log"),
+//   { flags: "a" }
+// );
+
+// fs.readFileSync("../logs/access.log", "utf8");
