@@ -2,6 +2,19 @@ import fs from "fs";
 import Covid from "../model/covidModel";
 const jsonxml = require("jsontoxml");
 
+let data = {
+  periodType: "days",
+  timeToElapse: "38",
+  reportedCases: "2747",
+  totalHospitalBeds: "678874",
+  population: "92931687",
+  region: {
+    avgAge: "19.7",
+    name: "Africa",
+    avgDailyIncomeInUSD: "4",
+    avgDailyIncomePopulation: "0.73"
+  }
+};
 export default class CovidController {
   static async addRegionData(req, res) {
     const {
@@ -43,7 +56,7 @@ export default class CovidController {
       avgDailyIncomePopulation
     } = req.body.region;
 
-    const newCovidData = new Covid({
+    const newCovidData = {
       periodType,
       timeToElapse,
       reportedCases,
@@ -55,35 +68,58 @@ export default class CovidController {
         avgDailyIncomeInUSD,
         avgDailyIncomePopulation
       }
+    };
+
+    data = {
+      ...newCovidData
+    };
+
+    res.status(201).json({
+      data
     });
 
-    try {
-      const covid = await newCovidData.save();
-      res.status(201).json({
-        status: true,
-        Message: "New Data successfully added",
-        covid
-      });
-    } catch (error) {
-      if (error) {
-        return res.status(400).json({
-          status: false,
-          Message: `An error occured while saving the product: ${error}`
-        });
-      }
-    }
+    // try {
+    //   const covid = await newCovidData.save();
+    //   res.status(201).json({
+    //     status: true,
+    //     Message: "New Data successfully added",
+    //     covid
+    //   });
+    // } catch (error) {
+    //   if (error) {
+    //     return res.status(400).json({
+    //       status: false,
+    //       Message: `An error occured while saving the product: ${error}`
+    //     });
+    //   }
+    // }
   }
 
   static async getCovidData(req, res) {
     const format = req.params.format;
-    let newObject = {};
 
-    const c19Data = await Covid.find();
+    let covidData = {
+      periodType: "days",
+      timeToElapse: "38",
+      reportedCases: "2747",
+      totalHospitalBeds: "678874",
+      population: "92931687",
+      region: {
+        avgAge: "19.7",
+        name: "Africa",
+        avgDailyIncomeInUSD: "4",
+        avgDailyIncomePopulation: "0.73"
+      }
+    };
 
-    const otherData = c19Data.map(data1 => data1);
-    otherData.forEach(data2 => {
-      newObject = data2;
-    });
+    // let newObject = {};
+
+    // const c19Data = await Covid.find();
+
+    // const otherData = c19Data.map(data1 => data1);
+    // otherData.forEach(data2 => {
+    //   newObject = data2;
+    // });
 
     const {
       periodType,
@@ -92,13 +128,14 @@ export default class CovidController {
       totalHospitalBeds,
       population,
       region
-    } = newObject;
+    } = covidData;
+
     const {
       name,
       avgDailyIncomeInUSD,
       avgDailyIncomePopulation,
       avgAge
-    } = region;
+    } = covidData.region;
 
     function factor() {
       let toDays = 0;
@@ -184,7 +221,7 @@ export default class CovidController {
       dollarsInFlight: output
     };
     const data = {
-      c19Data,
+      ...covidData,
       impact,
       severeImpact
     };
