@@ -221,9 +221,11 @@ export default class CovidController {
       dollarsInFlight: output
     };
     const data = {
-      ...covidData,
-      impact,
-      severeImpact
+      data: covidData,
+      estimate: {
+        impact,
+        severeImpact
+      }
     };
 
     const stringifyData = JSON.stringify(data);
@@ -240,8 +242,12 @@ export default class CovidController {
 
     return res.status(200).json({
       status: "success",
-      message: "Data returned successfully",
-      data
+      message: "Data returned successfullys",
+      data: covidData,
+      estimate: {
+        impact,
+        severeImpact
+      }
     });
   }
 
