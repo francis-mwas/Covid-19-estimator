@@ -98,19 +98,38 @@ export default class CovidController {
   static async getCovidData(req, res) {
     const format = req.params.format;
 
-    let covidData = {
-      periodType: "days",
-      timeToElapse: "38",
-      reportedCases: "2747",
-      totalHospitalBeds: "678874",
-      population: "92931687",
-      region: {
-        avgAge: "19.7",
-        name: "Africa",
-        avgDailyIncomeInUSD: "4",
-        avgDailyIncomePopulation: "0.73"
-      }
+    const {
+      periodType,
+      timeToElapse,
+      reportedCases,
+      totalHospitalBeds,
+      population
+    } = req.body;
+    const {
+      avgAge,
+      name,
+      avgDailyIncomeInUSD,
+      avgDailyIncomePopulation
+    } = req.body.region;
+
+    const covidData = {
+      region: req.body.region,
+      ...req.body
     };
+
+    // let covidData = {
+    //   periodType: "days",
+    //   timeToElapse: "38",
+    //   reportedCases: "2747",
+    //   totalHospitalBeds: "678874",
+    //   population: "92931687",
+    //   region: {
+    //     avgAge: "19.7",
+    //     name: "Africa",
+    //     avgDailyIncomeInUSD: "4",
+    //     avgDailyIncomePopulation: "0.73"
+    //   }
+    // };
 
     // let newObject = {};
 
@@ -121,21 +140,21 @@ export default class CovidController {
     //   newObject = data2;
     // });
 
-    const {
-      periodType,
-      timeToElapse,
-      reportedCases,
-      totalHospitalBeds,
-      population,
-      region
-    } = covidData;
+    // const {
+    //   periodType,
+    //   timeToElapse,
+    //   reportedCases,
+    //   totalHospitalBeds,
+    //   population,
+    //   region
+    // } = covidData;
 
-    const {
-      name,
-      avgDailyIncomeInUSD,
-      avgDailyIncomePopulation,
-      avgAge
-    } = covidData.region;
+    // const {
+    //   name,
+    //   avgDailyIncomeInUSD,
+    //   avgDailyIncomePopulation,
+    //   avgAge
+    // } = covidData.region;
 
     function factor() {
       let toDays = 0;
