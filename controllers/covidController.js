@@ -166,6 +166,8 @@ export default class CovidController {
       return toDays;
     }
 
+    console.log("This is the converted data:", convert());
+
     // code for impact
     const impCurrentlyInfected = reportedCases * 10;
     const impInfectionsByRequestedTime = impCurrentlyInfected * 2 ** factor();
@@ -241,8 +243,6 @@ export default class CovidController {
     }
 
     return res.status(200).json({
-      status: "success",
-      message: "Data returned successfullys",
       data: covidData,
       estimate: {
         impact,
