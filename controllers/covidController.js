@@ -42,6 +42,8 @@ export default class CovidController {
   }
 
   static async createData(req, res) {
+    const format = req.params.format;
+
     const {
       periodType,
       timeToElapse,
@@ -56,43 +58,123 @@ export default class CovidController {
       avgDailyIncomePopulation
     } = req.body.region;
 
-    const newCovidData = {
-      periodType,
-      timeToElapse,
-      reportedCases,
-      totalHospitalBeds,
-      population,
-      region: {
-        avgAge,
-        name,
-        avgDailyIncomeInUSD,
-        avgDailyIncomePopulation
+    const covidData = {
+      region: req.body.region,
+      ...req.body
+    };
+
+    function factor() {
+      let toDays = 0;
+      if (periodType === "days") {
+        toDays = timeToElapse;
+      } else if (periodType === "weeks") {
+        toDays = timeToElapse * 7;
+      } else if (periodType === "months") {
+        toDays = timeToElapse * 30;
+      }
+
+      return Math.trunc(toDays / 3);
+    }
+
+    function convert() {
+      let toDays = 0;
+      if (periodType === "days") {
+        console.log("we have the days", timeToElapse);
+        toDays = timeToElapse;
+      } else if (periodType === "weeks") {
+        console.log("we have the weeks", timeToElapse);
+        toDays = timeToElapse * 7;
+      } else if (periodType === "months") {
+        console.log("we have the months", timeToElapse);
+        toDays = timeToElapse * 30;
+      }
+
+      return toDays;
+    }
+
+    console.log("This is the converted data:", convert());
+
+    // code for impact
+    const impCurrentlyInfected = reportedCases * 10;
+    const impInfectionsByRequestedTime = impCurrentlyInfected * 2 ** factor();
+    const impseCasesByRequestedTime = Math.trunc(
+      impInfectionsByRequestedTime * 0.15
+    );
+    const impHospitalBedsByRequestedTime = Math.trunc(
+      totalHospitalBeds * 0.35 - impseCasesByRequestedTime
+    );
+    const impCasesForIcu = 0.05 * impInfectionsByRequestedTime;
+    const impCasesForVentilators = Math.trunc(
+      0.02 * impInfectionsByRequestedTime
+    );
+    const impDInFlight = Math.trunc(
+      (impInfectionsByRequestedTime *
+        avgDailyIncomeInUSD *
+        avgDailyIncomePopulation) /
+        convert()
+    );
+
+    const severeCurInfected = reportedCases * 50;
+    const seInfeByRequestedTime = severeCurInfected * 2 ** factor();
+    const seCasesByRequestedTime = Math.trunc(seInfeByRequestedTime * 0.15);
+    const seHospitalBedsByRequestedTime = Math.trunc(
+      totalHospitalBeds * 0.35 - seCasesByRequestedTime
+    );
+    const seCasesForIcu = 0.05 * seInfeByRequestedTime;
+    const seCasesForVentilators = Math.trunc(0.02 * seInfeByRequestedTime);
+    const seDInFlight =
+      seInfeByRequestedTime * avgDailyIncomePopulation * avgDailyIncomeInUSD;
+
+    const output = Math.trunc(seDInFlight / convert());
+
+    //  covid impact
+    const impact = {
+      currentlyInfected: impInfectionsByRequestedTime,
+      infectionsByRequestedTime: impInfectionsByRequestedTime,
+      severeCasesByRequestedTime: impseCasesByRequestedTime,
+      hospitalBedsByRequestedTime: impHospitalBedsByRequestedTime,
+      casesForICUByRequestedTime: impCasesForIcu,
+      casesForVentilatorsByRequestedTime: impCasesForVentilators,
+      dollarsInFlight: impDInFlight
+    };
+
+    // severe impact
+    const severeImpact = {
+      currentlyInfected: severeCurInfected,
+      infectionsByRequestedTime: seInfeByRequestedTime,
+      severeCasesByRequestedTime: seCasesByRequestedTime,
+      hospitalBedsByRequestedTime: seHospitalBedsByRequestedTime,
+      casesForICUByRequestedTime: seCasesForIcu,
+      casesForVentilatorsByRequestedTime: seCasesForVentilators,
+      dollarsInFlight: output
+    };
+    const data = {
+      data: covidData,
+      estimate: {
+        impact,
+        severeImpact
       }
     };
 
-    data = {
-      ...newCovidData
-    };
+    const stringifyData = JSON.stringify(data);
 
-    res.status(201).json({
-      data
+    if (format === "json") {
+      res.contentType("application/json");
+      return res.status(200).send(data);
+    }
+
+    if (format === "xml") {
+      res.contentType("application/xml");
+      return res.status(200).send(jsonxml(stringifyData, { xmlHeader: true }));
+    }
+
+    return res.status(200).json({
+      data: covidData,
+      estimate: {
+        impact,
+        severeImpact
+      }
     });
-
-    // try {
-    //   const covid = await newCovidData.save();
-    //   res.status(201).json({
-    //     status: true,
-    //     Message: "New Data successfully added",
-    //     covid
-    //   });
-    // } catch (error) {
-    //   if (error) {
-    //     return res.status(400).json({
-    //       status: false,
-    //       Message: `An error occured while saving the product: ${error}`
-    //     });
-    //   }
-    // }
   }
 
   static async getCovidData(req, res) {
