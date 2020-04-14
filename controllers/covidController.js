@@ -170,10 +170,8 @@ export default class CovidController {
 
     return res.status(200).json({
       data: covidData,
-      estimate: {
-        impact,
-        severeImpact
-      }
+      impact,
+      severeImpact
     });
   }
 
@@ -325,10 +323,8 @@ export default class CovidController {
     };
     const data = {
       data: covidData,
-      estimate: {
-        impact,
-        severeImpact
-      }
+      impact,
+      severeImpact
     };
 
     const stringifyData = JSON.stringify(data);
@@ -345,10 +341,8 @@ export default class CovidController {
 
     return res.status(200).json({
       data: covidData,
-      estimate: {
-        impact,
-        severeImpact
-      }
+      impact,
+      severeImpact
     });
   }
 
