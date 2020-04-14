@@ -184,7 +184,7 @@ export default class CovidController {
       dollarsInFlight: output
     };
     const data = {
-      newObject,
+      c19Data,
       impact,
       severeImpact
     };

@@ -27,7 +27,7 @@ app.use("/api/v1/on-covid-19", covidRouter);
 
 app.use("*", (req, res) => {
   return res.status(404).json({
-    Message: "URL DOES NOT EXIST, Please counter check"
+    Message: "Welcome to COVID19-ESTIMATOR"
   });
 });
 
