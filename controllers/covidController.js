@@ -130,7 +130,7 @@ export default class CovidController {
 
     //  covid impact
     const impact = {
-      currentlyInfected: impInfectionsByRequestedTime,
+      currentlyInfected: impCurrentlyInfected,
       infectionsByRequestedTime: impInfectionsByRequestedTime,
       severeCasesByRequestedTime: impseCasesByRequestedTime,
       hospitalBedsByRequestedTime: impHospitalBedsByRequestedTime,
