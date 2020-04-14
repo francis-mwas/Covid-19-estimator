@@ -349,7 +349,7 @@ export default class CovidController {
 
   static async getLogs(req, res) {
     try {
-      var data = fs.readFileSync(path.join(__dirname, "../logs/access.log"), {
+      var data = fs.readFileSync(path.join(__dirname, "../logs/log.txt"), {
         flags: "a"
       });
 

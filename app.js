@@ -17,7 +17,7 @@ if (process.env.NODE_ENV === "development") {
 }
 
 const accessLogStream = fs.createWriteStream(
-  path.join(__dirname, "logs/access.log"),
+  path.join(__dirname, "./logs/log.txt"),
   { flags: "a" }
 );
 app.use(
